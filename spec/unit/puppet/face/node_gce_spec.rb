@@ -5,5 +5,7 @@ describe Puppet::Face[:node_gce, :current] do
     lambda { subject.create }.should_not raise_error
   end
 
-
+  it 'supports calling project' do
+    lambda { subject.project }.should_not raise_error
+  end
 end
