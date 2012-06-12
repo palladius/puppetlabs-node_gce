@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe Puppet::Face[:node_gce, :current] do
+  before do
+    @handle = Puppet::GoogleCompute.new
+    Puppet::GoogleCompute.stubs(:new).returns(@handle)
+  end
+
   it 'supports creating an instance' do
     lambda { subject.create }.should_not raise_error
   end
@@ -21,12 +26,12 @@ describe Puppet::Face[:node_gce, :current] do
 
     describe 'and a project name is available' do
       it 'requests project data for the given project via the Google Compute REST API' do
-        Puppet::GoogleCompute.expects(:get_project).with(options[:project])
+        @handle.expects(:get_project).with(options[:project])
         subject.project(options)
       end
 
       it 'returns the project data provided by the Google Compute REST API' do
-        Puppet::GoogleCompute.stubs(:get_project).returns( {:foo => 'bar'} )
+        @handle.stubs(:get_project).returns( {:foo => 'bar'} )
         subject.project(options).should == {:foo => 'bar'}
       end
 
