@@ -1,3 +1,16 @@
 node_gce
 
 This is the node_gce module.
+
+
+
+Developers:
+
+To get your environment setup to be able to run specs:
+
+ - clone and/or update git checkouts of puppet and facter
+ - switch to puppet branch 2.7.12
+ - switch to facter branch 1.6.9
+ - ENVPUPPET_BASEDIR=~/git; export ENVPUPPET_BASEDIR
+ - . ~/git/puppet/ext/envpuppet
+ - RUBYLIB="${RUBYLIB}:${HOME}/git/puppetlabs-node_gce/lib"; export RUBYLIB
