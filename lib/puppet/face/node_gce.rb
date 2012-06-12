@@ -1,4 +1,5 @@
 require 'puppet/face'
+require 'puppet/google_compute'
 
 Puppet::Face.define(:node_gce, '0.0.1') do
   copyright "Puppet Labs", 2012
