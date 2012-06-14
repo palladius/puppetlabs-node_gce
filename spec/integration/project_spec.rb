@@ -1,4 +1,9 @@
 require 'spec_helper'
+require 'yaml'
+
+def credentials_path
+  File.expand_path(File.join(File.dirname(__FILE__), '..', 'fixtures', 'credentials.yml'))
+end
 
 describe 'when retrieving project data' do
   let :face do
@@ -6,17 +11,11 @@ describe 'when retrieving project data' do
   end
 
   let :options do
-    {
-      :project => 'ogtastic.com:rick-hello-world'
-    }
+    { :project => 'ogtastic.com:rick-hello-world' }
   end
 
   let :credentials do
-    {
-      :client_id     => '1462647242-kfksu80t99hepn4jbtjrul5f0kb4ja16.apps.googleusercontent.com',
-      :client_secret => 'dJFz1EidloS4i6UGLt8mzYbs',
-      :refresh_token => '1/vvCW0aPjecDx__bjcEsm2aRJH_QV_oH9COXFlAzfQIs',
-    }
+    YAML.load(File.read(credentials_path))[:gce]
   end
 
   before do
