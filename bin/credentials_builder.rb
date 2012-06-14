@@ -3,9 +3,17 @@
 require 'rubygems'
 require 'oauth2'
 
+def fog_compatible_credentials(client_id, client_secret, authorization_code, refresh_token)
+%Q<:gce:
+  :client_id: "#{client_id}"
+  :client_secret: "#{client_secret}"
+  :authorization_code: "#{authorization_code}"
+  :refresh_token: "#{refresh_token}"
+>
+end
+
 redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
 scope = "https://www.googleapis.com/auth/compute https://www.googleapis.com/auth/compute.readonly https://www.googleapis.com/auth/devstorage.full_control https://www.googleapis.com/auth/devstorage.read_only https://www.googleapis.com/auth/devstorage.read_write https://www.googleapis.com/auth/devstorage.write_only https://www.googleapis.com/auth/userinfo.email"
-
 
 puts "Building credentials file for Google Compute Oauth2"
 
@@ -36,12 +44,12 @@ print "Enter file for storing OAuth2 credentials [/tmp/oauth2_credentials.rb]: "
 filename = STDIN.gets.chomp.strip
 filename = "/tmp/oauth2_credentials.rb" if filename == ''
 
-puts "Storing credentials information in [#{filename}]..."
 
-File.open(filename, 'w') do |f|
-  f.puts ":gce:"
-  f.puts %Q{  :client_id: "#{client_id}"}
-  f.puts %Q{  :client_secret: "#{client_secret}"}
-  f.puts %Q{  :authorization_code: "#{code}"}
-  f.puts %Q{  :refresh_token: "#{refresh_token}"}
-end
+fog_credentials = fog_compatible_credentials(client_id, client_id, code, refresh_token)
+puts
+puts fog_credentials
+puts
+
+puts "Storing credentials information in [#{filename}]..."
+File.open(filename, 'w') {|f| f.puts fog_credentials }
+
