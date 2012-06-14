@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'rubygems'
 require 'oauth2'
 
@@ -17,7 +19,7 @@ puts
 @client = OAuth2::Client.new(@client_id, @client_secret, :site => 'https://accounts.google.com', :token_url => '/o/oauth2/token', :authorize_url => '/o/oauth2/auth')
 @webpage = @client.auth_code.authorize_url(:redirect_uri => @redirect_uri, :scope => @scope)
 
-puts "Go to this link to authorize the application:\n#{@webpage}"
+puts "Go to this link to authorize the application:\n\n#{@webpage}\n\n"
 print "and enter the code you find after authorizing: "
 @code = STDIN.gets.chomp
 
@@ -29,5 +31,17 @@ puts "client_secret: #{@client_secret}"
 puts "authorization_code: #{@code}"
 puts "refresh_token: #{@refresh_token}"
 
-puts "Storing credentials information ..."
+puts
+print "Enter file for storing OAuth2 credentials [/tmp/oauth2_credentials.rb]: "
+@filename = STDIN.gets.chomp.strip
+@filename = "/tmp/oauth2_credentials.rb" if @filename == ''
 
+puts "Storing credentials information in [#{@filename}]..."
+
+File.open(@filename, 'w') do |f|
+  f.puts ":gce:"
+  f.puts %Q{  :client_id: "#{@client_id}"}
+  f.puts %Q{  :client_secret: "#{@client_secret}"}
+  f.puts %Q{  :authorization_code: "#{@code}"}
+  f.puts %Q{  :refresh_token: "#{@refresh_token}"}
+end
