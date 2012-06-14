@@ -45,7 +45,7 @@ filename = STDIN.gets.chomp.strip
 filename = "/tmp/oauth2_credentials.rb" if filename == ''
 
 
-fog_credentials = fog_compatible_credentials(client_id, client_id, code, refresh_token)
+fog_credentials = fog_compatible_credentials(client_id, client_secret, code, refresh_token)
 puts
 puts fog_credentials
 puts
