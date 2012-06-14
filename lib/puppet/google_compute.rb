@@ -5,13 +5,14 @@ require 'yaml'
 module Puppet
   class GoogleCompute
     def get_project(project_name)
-      do_request(project_name, 'zones')
+      # this request is weird, namespace-wise
+      token.get("https://www.googleapis.com/compute/v1beta11/projects/#{URI.escape(project_name)}").body
     end
 
   private
 
     def do_request(project_name, path)
-      token.get("https://www.googleapis.com/compute/v1beta11/projects/#{URI.escape(project_name)}/#{URI.escape(path)}")
+        token.get("https://www.googleapis.com/compute/v1beta11/projects/#{URI.escape(project_name)}/#{URI.escape(path)}").body
     end
 
     def token

@@ -55,6 +55,8 @@ describe 'when retrieving project data' do
   end
 
   it 'returns the project data from the Google Compute API' do
-    face.project(options).should == '{}'
+    json_result = face.project(options)
+    result = PSON.parse(json_result)  # yeah, I know.  "PSON" was not my decision.
+    result.keys.sort.should == ["commonInstanceMetadata", "description", "id", "kind", "name", "quotas", "selfLink"]
   end
 end
