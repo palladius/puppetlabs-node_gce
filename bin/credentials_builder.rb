@@ -25,7 +25,7 @@ client_secret = STDIN.gets.chomp
 puts
 
 client = OAuth2::Client.new(client_id, client_secret, :site => 'https://accounts.google.com', :token_url => '/o/oauth2/token', :authorize_url => '/o/oauth2/auth')
-webpage = client.auth_code.authorize_url(:redirect_uri => redirect_uri, :scope => scope)
+webpage = client.auth_code.authorize_url(:redirect_uri => redirect_uri, :scope => scope, :access_type => :offline)
 
 puts "Go to this link to authorize the application:\n\n#{webpage}\n\n"
 print "and enter the code you find after authorizing: "
@@ -52,4 +52,3 @@ puts
 
 puts "Storing credentials information in [#{filename}]..."
 File.open(filename, 'w') {|f| f.puts fog_credentials }
-
