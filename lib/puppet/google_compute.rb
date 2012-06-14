@@ -1,5 +1,6 @@
 require 'oauth2'
 require 'uri'
+require 'yaml'
 
 module Puppet
   class GoogleCompute
@@ -56,6 +57,14 @@ module Puppet
       raise(ArgumentError, ":refresh_token must be specified in credentials") unless unvalidated_credentials[:refresh_token]
 
       unvalidated_credentials
+    end
+
+    def fetch_credentials
+      YAML.load(File.read(credentials_path))[:gce]
+    end
+
+    def credentials_path
+      File.expand_path('~/.fog')
     end
   end
 end
