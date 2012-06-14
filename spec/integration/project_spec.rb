@@ -1,8 +1,8 @@
 require 'spec_helper'
 require 'yaml'
 
-def credentials_path
-  File.expand_path(File.join(File.dirname(__FILE__), '..', 'fixtures', 'credentials.yml'))
+def fixture_path(file)
+  File.expand_path(File.join(File.dirname(__FILE__), '..', 'fixtures', file))
 end
 
 describe 'when retrieving project data' do
@@ -11,11 +11,11 @@ describe 'when retrieving project data' do
   end
 
   let :options do
-    { :project => 'ogtastic.com:rick-hello-world' }
+    YAML.load(File.read(fixture_path('project.yml')))
   end
 
   let :credentials do
-    YAML.load(File.read(credentials_path))[:gce]
+    YAML.load(File.read(fixture_path('credentials.yml')))[:gce]
   end
 
   before do
