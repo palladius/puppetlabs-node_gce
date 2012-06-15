@@ -6,7 +6,7 @@ module Puppet
   class GoogleCompute
     def get_project(project_name)
       # this request is weird, namespace-wise
-      token.get("https://www.googleapis.com/compute/v1beta11/projects/#{URI.escape(project_name)}").body
+      token.get("#{api_url}/projects/#{URI.escape(project_name)}").body
     end
 
     def instance_list(project_name)
@@ -16,7 +16,11 @@ module Puppet
   private
 
     def do_request(project_name, path)
-        token.get("https://www.googleapis.com/compute/v1beta11/projects/#{URI.escape(project_name)}/#{URI.escape(path)}").body
+      token.get("#{api_url}/projects/#{URI.escape(project_name)}/#{URI.escape(path)}").body
+    end
+
+    def api_url
+      "https://www.googleapis.com/compute/v1beta11"
     end
 
     def token
