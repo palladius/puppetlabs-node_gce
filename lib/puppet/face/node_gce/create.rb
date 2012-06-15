@@ -9,12 +9,20 @@ Puppet::Face.define :node_gce, '0.0.1' do
 
       A newly created system may not be immediately ready after launch while
       it boots.
-
-      If creation of the instance fails, Puppet will automatically clean up
-      after itself and tear down the instance.
     EOT
 
+    option '--project=' do
+      summary 'The name of the Google Compute project.'
+
+      description <<-EOT
+        The name of the Google Compute project to query.
+      EOT
+
+      required
+    end
+
     when_invoked do |options|
+      Puppet::GoogleCompute.new(options[:project]).instance_create(options)
     end
 
     when_rendering :console do |value|
