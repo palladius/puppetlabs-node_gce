@@ -17,7 +17,7 @@ describe Puppet::Face[:node_gce, :current] do
   describe 'when creating an instance' do
     it 'requires a project name' do
       lambda {
-        options.delete[:project]
+        options.delete(:project)
         subject.create(options)
       }.should raise_error(ArgumentError)
     end
@@ -47,7 +47,7 @@ describe Puppet::Face[:node_gce, :current] do
   describe 'when listing instance data' do
     it 'requires a project name' do
       lambda {
-        options.delete[:project]
+        options.delete(:project)
         subject.list(options)
       }.should raise_error(ArgumentError)
     end
@@ -81,7 +81,7 @@ describe Puppet::Face[:node_gce, :current] do
 
     it 'requires a project name' do
       lambda {
-        options.delete[:project]
+        options.delete(:project)
         subject.project(options)
       }.should raise_error(ArgumentError)
     end
