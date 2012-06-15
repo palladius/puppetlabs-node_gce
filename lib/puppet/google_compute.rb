@@ -5,16 +5,16 @@ require 'yaml'
 module Puppet
   class GoogleCompute
     def project_get(project_name)
-      do_request(project_name)
+      get(project_name)
     end
 
     def instance_list(project_name)
-      do_request(project_name, 'instances')
+      get(project_name, 'instances')
     end
 
   private
 
-    def do_request(project_name, path = '')
+    def get(project_name, path = '')
       token.get(build_url(project_name, path)).body
     end
 
