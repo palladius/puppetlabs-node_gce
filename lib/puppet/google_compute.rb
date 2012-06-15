@@ -60,10 +60,9 @@ module Puppet
     def validate_credentials
       unvalidated_credentials = fetch_credentials
 
-      raise(ArgumentError, ":client_id must be specified in credentials") unless unvalidated_credentials[:client_id]
-      raise(ArgumentError, ":client_secret must be specified in credentials") unless unvalidated_credentials[:client_secret]
-
-      raise(ArgumentError, ":refresh_token must be specified in credentials") unless unvalidated_credentials[:refresh_token]
+      [:client_id, :client_secret, :refresh_token].each do |arg|
+        raise(ArgumentError, ":#{arg} must be specified in credentials") unless unvalidated_credentials[arg]
+      end
 
       unvalidated_credentials
     end
