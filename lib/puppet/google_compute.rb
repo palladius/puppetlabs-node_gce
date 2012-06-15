@@ -9,6 +9,10 @@ module Puppet
       token.get("https://www.googleapis.com/compute/v1beta11/projects/#{URI.escape(project_name)}").body
     end
 
+    def instance_list(project_name)
+      do_request(project_name, 'instances')
+    end
+
   private
 
     def do_request(project_name, path)
