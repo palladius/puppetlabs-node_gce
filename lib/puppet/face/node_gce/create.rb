@@ -21,6 +21,16 @@ Puppet::Face.define :node_gce, '0.0.1' do
       required
     end
 
+    option '--name=' do
+      summary 'The name of the instance.'
+
+      description <<-EOT
+        The name of the Google Compute instance to create.
+      EOT
+
+      required
+    end
+
     when_invoked do |options|
       Puppet::GoogleCompute.new(options[:project]).instance_create(options)
     end

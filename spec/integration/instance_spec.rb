@@ -26,6 +26,10 @@ describe 'instances' do
   end
 
   describe 'when creating an instance' do
+    let :options do
+      YAML.load(File.read(fixture_path('project.yml'))).merge(:name => 'testnode')
+    end
+
     it 'fails when there is no credentials data' do
       @handle.stubs(:fetch_credentials).returns({})
       lambda { face.create(options) }.should raise_error
@@ -56,6 +60,8 @@ describe 'instances' do
       result = PSON.parse(json_result)  # yeah, I know.  "PSON" was not my decision.
       result.keys.sort.should == ["id", "kind", "selfLink"]
     end
+
+    it 'creates a node with the specified name'
   end
 
   describe 'when retrieving instance list data' do

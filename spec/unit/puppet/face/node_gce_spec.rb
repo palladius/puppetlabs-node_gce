@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Puppet::Face[:node_gce, :current] do
   let :options do
-    { :project => 'megaproject' }
+    { :project => 'megaproject', :name => 'foonode' }
   end
 
   before do
@@ -18,6 +18,13 @@ describe Puppet::Face[:node_gce, :current] do
     it 'requires a project name' do
       lambda {
         options.delete(:project)
+        subject.create(options)
+      }.should raise_error(ArgumentError)
+    end
+
+    it 'requires a node name' do
+      lambda {
+        options.delete(:name)
         subject.create(options)
       }.should raise_error(ArgumentError)
     end
