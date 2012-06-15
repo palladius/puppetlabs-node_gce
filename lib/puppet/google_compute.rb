@@ -18,16 +18,51 @@ module Puppet
       get('instances')
     end
 
+    def instance_create(params)
+      post('instances', instance_create_params_builder(params))
+    end
+
   private
 
     def get(path = '')
       token.get(build_url(path)).body
     end
 
-    def build_url(path)
-      url = "#{api_url}/projects/#{URI.escape(project_name)}"
-      url += "/#{URI.escape(path)}" unless path == ''
-      url
+    def post(path, params)
+      token.post(build_url(path)) { |request|
+        request.headers['Content-Type'] = 'application/json'
+        request.body = PSON.dump(params)
+      }.body
+    end
+
+    def instance_create_params_builder(params)
+      {
+        'name'         => 'test',
+        'machineType'  => machine_type('standard-8-cpu'),
+        'zone'         => zone('us-east-b'),
+        'network'      => network('default')
+      }
+    end
+
+    def machine_type(name)
+      build_url('machine-types', name)
+    end
+
+    def zone(name)
+      build_url('zones', name)
+    end
+
+    def network(name)
+      build_url('networks', name)
+    end
+
+    def build_url(*path)
+      url = "#{api_url}/projects/#{URI.escape(project_name)}" + path_from_params(path)
+    end
+
+    def path_from_params(params)
+      path = params.join('/').strip
+      path == '' ? '' : "/#{URI.escape(path)}"
     end
 
     def api_url
