@@ -19,14 +19,9 @@ describe 'when retrieving project data' do
   end
 
   before do
-    @handle = Puppet::GoogleCompute.new
+    @handle = Puppet::GoogleCompute.new(options[:project])
     Puppet::GoogleCompute.stubs(:new).returns(@handle)
     @handle.stubs(:fetch_credentials).returns(credentials)
-  end
-
-  it 'fails when there is no project name' do
-    options.delete(:project)
-    lambda { face.project(options) }.should raise_error
   end
 
   it 'fails when there is no credentials data' do

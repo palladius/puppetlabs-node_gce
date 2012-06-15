@@ -1,8 +1,13 @@
 require 'spec_helper'
 
 describe Puppet::Face[:node_gce, :current] do
+  let :options do
+    { :project => 'megaproject' }
+  end
+
   before do
-    @handle = Puppet::GoogleCompute.new
+    @handle = Puppet::GoogleCompute.new(options[:project])
+    @handle.stubs(:get).returns('')
     Puppet::GoogleCompute.stubs(:new).returns(@handle)
   end
 
@@ -11,10 +16,6 @@ describe Puppet::Face[:node_gce, :current] do
   end
 
   describe 'when listing instance data' do
-    let :options do
-      { :project => 'megaproject' }
-    end
-
     it 'requires a project name' do
       lambda {
         options.delete[:project]
@@ -23,8 +24,13 @@ describe Puppet::Face[:node_gce, :current] do
     end
 
     describe 'and a project name is available' do
+      it 'provides the project name to the Google Compute REST API' do
+        Puppet::GoogleCompute.expects(:new).with(options[:project]).returns(@handle)
+        subject.list(options)
+      end
+
       it 'requests running instance list data for the given project via the Google Compute REST API' do
-        @handle.expects(:instance_list).with(options[:project])
+        @handle.expects(:instance_list).with()
         subject.list(options)
       end
 
@@ -52,8 +58,13 @@ describe Puppet::Face[:node_gce, :current] do
     end
 
     describe 'and a project name is available' do
+      it 'provides the project name to the Google Compute REST API' do
+        Puppet::GoogleCompute.expects(:new).with(options[:project]).returns(@handle)
+        subject.project(options)
+      end
+
       it 'requests project data for the given project via the Google Compute REST API' do
-        @handle.expects(:project_get).with(options[:project])
+        @handle.expects(:project_get).with()
         subject.project(options)
       end
 

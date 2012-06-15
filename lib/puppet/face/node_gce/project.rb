@@ -18,7 +18,7 @@ Puppet::Face.define :node_gce, '0.0.1' do
     end
 
     when_invoked do |options|
-      Puppet::GoogleCompute.new.project_get(options[:project])
+      Puppet::GoogleCompute.new(options[:project]).project_get
     end
 
     when_rendering :console do |value|

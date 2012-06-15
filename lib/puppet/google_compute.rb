@@ -4,21 +4,27 @@ require 'yaml'
 
 module Puppet
   class GoogleCompute
-    def project_get(project_name)
-      get(project_name)
+    attr_reader :project_name
+
+    def initialize(project_name)
+      @project_name = project_name
     end
 
-    def instance_list(project_name)
-      get(project_name, 'instances')
+    def project_get
+      get
+    end
+
+    def instance_list
+      get('instances')
     end
 
   private
 
-    def get(project_name, path = '')
-      token.get(build_url(project_name, path)).body
+    def get(path = '')
+      token.get(build_url(path)).body
     end
 
-    def build_url(project_name, path)
+    def build_url(path)
       url = "#{api_url}/projects/#{URI.escape(project_name)}"
       url += "/#{URI.escape(path)}" unless path == ''
       url
