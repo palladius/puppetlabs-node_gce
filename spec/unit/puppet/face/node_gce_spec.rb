@@ -41,9 +41,7 @@ describe Puppet::Face[:node_gce, :current] do
 
   describe 'when retrieving project data' do
     let :options do
-      {
-        :project => 'megaproject'
-      }
+      { :project => 'megaproject' }
     end
 
     it 'requires a project name' do
