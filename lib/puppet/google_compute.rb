@@ -4,7 +4,7 @@ require 'yaml'
 
 module Puppet
   class GoogleCompute
-    def get_project(project_name)
+    def project_get(project_name)
       do_request(project_name)
     end
 

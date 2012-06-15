@@ -53,12 +53,12 @@ describe Puppet::Face[:node_gce, :current] do
 
     describe 'and a project name is available' do
       it 'requests project data for the given project via the Google Compute REST API' do
-        @handle.expects(:get_project).with(options[:project])
+        @handle.expects(:project_get).with(options[:project])
         subject.project(options)
       end
 
       it 'returns the project data provided by the Google Compute REST API' do
-        @handle.stubs(:get_project).returns( {:foo => 'bar'} )
+        @handle.stubs(:project_get).returns( {:foo => 'bar'} )
         subject.project(options).should == {:foo => 'bar'}
       end
 
