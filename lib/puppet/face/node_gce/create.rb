@@ -1,9 +1,7 @@
 require 'puppet/face/node_gce'
 
 Puppet::Face.define :node_gce, '0.0.1' do
-
   action :create do
-
     summary 'Create a new machine instance.'
     description <<-EOT
       Launches a new Google Compute machine instance and returns the
@@ -17,7 +15,10 @@ Puppet::Face.define :node_gce, '0.0.1' do
     EOT
 
     when_invoked do |options|
+    end
 
+    when_rendering :console do |value|
+      value.to_s
     end
   end
 end
