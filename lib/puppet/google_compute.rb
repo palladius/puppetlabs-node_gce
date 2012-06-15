@@ -73,7 +73,11 @@ module Puppet
     end
 
     def fetch_credentials
-      YAML.load(File.read(credentials_path))[:gce]
+      @fetched_credentials = load_credentials[:gce]
+    end
+
+    def load_credentials
+      YAML.load(File.read(credentials_path))
     end
 
     def credentials_path
