@@ -5,8 +5,7 @@ require 'yaml'
 module Puppet
   class GoogleCompute
     def get_project(project_name)
-      # this request is weird, namespace-wise
-      token.get("#{api_url}/projects/#{URI.escape(project_name)}").body
+      do_request(project_name)
     end
 
     def instance_list(project_name)
