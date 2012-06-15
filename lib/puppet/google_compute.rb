@@ -79,7 +79,7 @@ module Puppet
     end
 
     def fetch_credentials
-      @fetched_credentials = load_credentials[:gce]
+      @fetched_credentials ||= load_credentials[:gce]
     end
 
     def load_credentials
