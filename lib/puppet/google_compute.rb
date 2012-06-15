@@ -15,8 +15,14 @@ module Puppet
 
   private
 
-    def do_request(project_name, path)
-      token.get("#{api_url}/projects/#{URI.escape(project_name)}/#{URI.escape(path)}").body
+    def do_request(project_name, path = '')
+      token.get(build_url(project_name, path)).body
+    end
+
+    def build_url(project_name, path)
+      url = "#{api_url}/projects/#{URI.escape(project_name)}"
+      url += "/#{URI.escape(path)}" unless path == ''
+      url
     end
 
     def api_url
