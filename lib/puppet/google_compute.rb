@@ -19,7 +19,18 @@ module Puppet
     end
 
     def instance_create(params)
-      post('instances', instance_create_params_builder(params))
+      args = {
+        'name'         => params[:name],
+        'machineType'  => machine_type('standard-1-cpu'),
+        'zone'         => zone('us-east-b'),
+        'networkInterfaces' => [  # hi, I'm undocumented!
+          {
+            'accessConfigs' => [ { 'type' => "ONE_TO_ONE_NAT", 'name' => "External NAT" } ],
+            'network'       => network('default'),
+          }
+        ]
+      }
+      post('instances', args)
     end
 
   private
@@ -33,15 +44,6 @@ module Puppet
         request.headers['Content-Type'] = 'application/json'
         request.body = PSON.dump(params)
       }.body
-    end
-
-    def instance_create_params_builder(params)
-      {
-        'name'         => 'test',
-        'machineType'  => machine_type('standard-8-cpu'),
-        'zone'         => zone('us-east-b'),
-        'network'      => network('default')
-      }
     end
 
     def machine_type(name)
