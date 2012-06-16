@@ -61,6 +61,10 @@ module Puppet
       get('disks')
     end
 
+    def kernel_list
+      get('kernels')
+    end
+
   private
 
     def get(*path)
