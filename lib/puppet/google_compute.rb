@@ -10,8 +10,16 @@ module Puppet
       @project_name = project_name
     end
 
-    def project_get
-      get
+    def disk_list
+      get('disks')
+    end
+
+    def firewall_list
+      get('firewalls')
+    end
+
+    def image_list
+      get('images')
     end
 
     def instance_list
@@ -41,40 +49,32 @@ module Puppet
       wait_for(delete('instances', params[:name]))
     end
 
-    def operation_get(params)
-      get('operations', params[:name])
+    def kernel_list
+      get('kernels')
+    end
+
+    def machine_type_list
+      get('machine-types')
     end
 
     def network_list
       get('networks')
     end
 
-    def firewall_list
-      get('firewalls')
-    end
-
-    def image_list
-      get('images')
-    end
-
-    def disk_list
-      get('disks')
-    end
-
-    def kernel_list
-      get('kernels')
-    end
-
-    def zone_list
-      get('zones')
-    end
-
     def operation_list
       get('operations')
     end
 
-    def machine_type_list
-      get('machine-types')
+    def operation_get(params)
+      get('operations', params[:name])
+    end
+
+    def project_get
+      get
+    end
+
+    def zone_list
+      get('zones')
     end
 
   private
