@@ -73,6 +73,10 @@ module Puppet
       get('operations')
     end
 
+    def machine_type_list
+      get('machine-types')
+    end
+
   private
 
     def get(*path)
