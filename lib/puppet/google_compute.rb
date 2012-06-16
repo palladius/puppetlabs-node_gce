@@ -57,6 +57,10 @@ module Puppet
       get('images')
     end
 
+    def disk_list
+      get('disks')
+    end
+
   private
 
     def get(*path)
