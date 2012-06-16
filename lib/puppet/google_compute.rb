@@ -18,6 +18,10 @@ module Puppet
       get('instances')
     end
 
+    def instance_get(params)
+      get('instances', params[:name])
+    end
+
     def instance_create(params)
       args = {
         'name'         => params[:name],
