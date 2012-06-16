@@ -26,7 +26,7 @@ module Puppet
       args = {
         'name'         => params[:name],
         'machineType'  => machine_type(params[:machine_type] || 'standard-1-cpu-ephemeral-disk'),
-        'zone'         => zone('us-east-b'),
+        'zone'         => zone(params[:zone] || 'us-east-a'),
         'networkInterfaces' => [  # hi, I'm undocumented!
           {
             'accessConfigs' => [ { 'type' => "ONE_TO_ONE_NAT", 'name' => "External NAT" } ],

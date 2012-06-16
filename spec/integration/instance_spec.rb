@@ -114,6 +114,20 @@ describe 'instances' do
       result = PSON.parse(json_result)
       result['machineType'].split('/').last.should == 'standard-1-cpu-ephemeral-disk'
     end
+
+    it 'creates an instance with the specified zone when a zone is provided' do
+      json_result = face.create(options.merge(:zone => 'us-east-b'))
+      flag_for_instance_cleanup!
+      result = PSON.parse(json_result)
+      result['zone'].split('/').last.should == 'us-east-b'
+    end
+
+    it 'creates an instance in the us-east-a zone when no zone is provided' do
+      json_result = face.create(options)
+      flag_for_instance_cleanup!
+      result = PSON.parse(json_result)
+      result['zone'].split('/').last.should == 'us-east-a'
+    end
   end
 
   describe 'when terminating an instance' do
