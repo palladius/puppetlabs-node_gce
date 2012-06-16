@@ -50,7 +50,7 @@ describe 'networks' do
     it 'returns the networks list data from the Google Compute API' do
       json_result = face.networks(options)
       result = PSON.parse(json_result)
-      result.keys.sort.should == ["id", "items", "kind", "selfLink"]
+      result['kind'].should == "compute\#networkList"
     end
   end
 end

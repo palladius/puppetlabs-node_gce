@@ -50,7 +50,7 @@ describe 'disks' do
     it 'returns the disk list data from the Google Compute API' do
       json_result = face.disks(options)
       result = PSON.parse(json_result)
-      result.keys.sort.should == ["id", "kind", "selfLink"]
+      result['kind'].should == "compute\#diskList"
     end
   end
 end

@@ -50,7 +50,7 @@ describe 'zones' do
     it 'returns the zone list data from the Google Compute API' do
       json_result = face.zones(options)
       result = PSON.parse(json_result)
-      result.keys.sort.should == ["id", "items", "kind", "selfLink"]
+      result['kind'].should == "compute\#zoneList"
     end
   end
 end

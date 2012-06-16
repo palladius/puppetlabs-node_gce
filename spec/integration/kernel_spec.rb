@@ -50,7 +50,7 @@ describe 'kernels' do
     it 'returns the kernel list data from the Google Compute API' do
       json_result = face.kernels(options)
       result = PSON.parse(json_result)
-      result.keys.sort.should == ["id", "kind", "selfLink"]
+      result['kind'].should == "compute\#kernelList"
     end
   end
 end

@@ -50,7 +50,7 @@ describe 'images' do
     it 'returns the image list data from the Google Compute API' do
       json_result = face.images(options)
       result = PSON.parse(json_result)
-      result.keys.sort.should == ["id", "kind", "selfLink"]
+      result['kind'].should == "compute\#imageList"
     end
   end
 end

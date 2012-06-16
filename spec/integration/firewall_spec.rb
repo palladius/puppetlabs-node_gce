@@ -50,7 +50,7 @@ describe 'firewalls' do
     it 'returns the firewall list data from the Google Compute API' do
       json_result = face.firewalls(options)
       result = PSON.parse(json_result)
-      result.keys.sort.should == ["id", "items", "kind", "selfLink"]
+      result['kind'].should == "compute\#firewallList"
     end
   end
 end

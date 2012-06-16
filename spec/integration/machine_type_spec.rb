@@ -50,7 +50,7 @@ describe 'machine types' do
     it 'returns the machine type list data from the Google Compute API' do
       json_result = face.machine_types(options)
       result = PSON.parse(json_result)
-      result.keys.sort.should == ["id", "items", "kind", "selfLink"]
+      result['kind'].should == "compute\#machineTypeList"
     end
   end
 end

@@ -50,7 +50,7 @@ describe 'operations' do
     it 'returns the operation list data from the Google Compute API' do
       json_result = face.operations(options)
       result = PSON.parse(json_result)
-      result.keys.sort.should == ["id", "items", "kind", "nextPageToken", "selfLink"]
+      result['kind'].should == "compute\#operationList"
     end
   end
 end

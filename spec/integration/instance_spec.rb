@@ -187,7 +187,7 @@ describe 'instances' do
     it 'returns the instance list data from the Google Compute API' do
       json_result = face.list(options)
       result = PSON.parse(json_result)
-      result.keys.sort.should == ["id", "kind", "selfLink"]
+      result['kind'].should == "compute\#instanceList"
     end
 
     it 'follows pagination links when a large number of instances are present'
