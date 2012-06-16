@@ -1,9 +1,0 @@
-Running Tests:
-
- - gem install rspec mocha
- - create a Google Compute project
- - Authorize API access (project name: "Puppet Cloud Provisioner")
- - create a client ID for an "installed application"
- - run bin/credentials_builder.rb specifying that output should go to spec/fixtures/credentials.yml
- - make a spec/fixtures/project.yml (see spec/fixtures/project.yml-example for format) with your project name in it
- - rspec spec

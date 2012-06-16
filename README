@@ -2,8 +2,6 @@ node_gce
 
 This is the node_gce module.
 
-
-
 Developers:
 
 To get your environment setup to be able to run specs:
@@ -14,3 +12,11 @@ To get your environment setup to be able to run specs:
  - ENVPUPPET_BASEDIR=~/git; export ENVPUPPET_BASEDIR
  - . ~/git/puppet/ext/envpuppet
  - RUBYLIB="${RUBYLIB}:${HOME}/git/puppetlabs-node_gce/lib"; export RUBYLIB
+ - gem install rspec mocha
+ - create a Google Compute project
+ - Authorize API access (project name: "Puppet Cloud Provisioner")
+ - create a client ID for an "installed application"
+ - run bin/credentials_builder.rb specifying that output should go to spec/fixtures/credentials.yml  (conversely, to ~/.fog if you want to use those credentials outside of testing)
+ - make a spec/fixtures/project.yml (see spec/fixtures/project.yml-example for format) with your project name in it
+ - rspec spec
+
