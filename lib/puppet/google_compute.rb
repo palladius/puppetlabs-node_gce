@@ -35,8 +35,8 @@ module Puppet
 
   private
 
-    def get(path = '')
-      token.get(build_url(path)).body
+    def get(*path)
+      token.get(build_url(*path)).body
     end
 
     def post(path, params)
