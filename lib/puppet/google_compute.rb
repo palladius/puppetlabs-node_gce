@@ -65,6 +65,10 @@ module Puppet
       get('kernels')
     end
 
+    def zone_list
+      get('zones')
+    end
+
   private
 
     def get(*path)
