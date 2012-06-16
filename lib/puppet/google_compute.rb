@@ -49,6 +49,10 @@ module Puppet
       get('networks')
     end
 
+    def firewall_list
+      get('firewalls')
+    end
+
   private
 
     def get(*path)
