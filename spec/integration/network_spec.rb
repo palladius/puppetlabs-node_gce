@@ -24,27 +24,27 @@ describe 'networks' do
   describe 'when retrieving network list data' do
     it 'fails when there is no credentials data' do
       @handle.stubs(:fetch_credentials).returns({})
-      lambda { face.list(options) }.should raise_error
+      lambda { face.networks(options) }.should raise_error
     end
 
     it 'fails when the credentials data does not include a client id' do
       credentials.delete(:client_id)
-      lambda { face.list(options) }.should raise_error
+      lambda { face.networks(options) }.should raise_error
     end
 
     it 'fails when the credentials data does not include a client secret' do
       credentials.delete(:client_secret)
-      lambda { face.list(options) }.should raise_error
+      lambda { face.networks(options) }.should raise_error
     end
 
     it 'fails when the credentials data does not include a refresh token' do
       credentials.delete(:refresh_token)
-      lambda { face.list(options) }.should raise_error
+      lambda { face.networks(options) }.should raise_error
     end
 
     it 'fails when the credentials provided are invalid' do
       credentials[:client_id] = '1462647242-bad-id.apps.googleusercontent.com'
-      lambda { face.list(options) }.should raise_error
+      lambda { face.networks(options) }.should raise_error
     end
 
     it 'returns the networks list data from the Google Compute API' do
