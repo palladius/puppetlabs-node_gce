@@ -25,7 +25,7 @@ module Puppet
     def instance_create(params)
       args = {
         'name'         => params[:name],
-        'machineType'  => machine_type('standard-1-cpu'),
+        'machineType'  => machine_type(params[:machine_type] || 'standard-1-cpu-ephemeral-disk'),
         'zone'         => zone('us-east-b'),
         'networkInterfaces' => [  # hi, I'm undocumented!
           {

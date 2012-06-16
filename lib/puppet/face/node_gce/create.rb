@@ -31,6 +31,14 @@ Puppet::Face.define :node_gce, '0.0.1' do
       required
     end
 
+    option '--machine-type=' do
+      summary 'The type of machine to create.'
+
+      description <<-EOT
+        The Google Compute machine type to create.  Defaults to "standard-1-cpu-ephemeral-disk".
+      EOT
+    end
+
     when_invoked do |options|
       Puppet::GoogleCompute.new(options[:project]).instance_create(options)
     end

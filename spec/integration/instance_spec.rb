@@ -100,6 +100,20 @@ describe 'instances' do
       result = PSON.parse(json_result)
       result['name'].split('/').last.should == options[:name]
     end
+
+    it 'creates an instance with the specified machine type when a machine type is provided' do
+      json_result = face.create(options.merge(:machine_type => 'standard-2-cpu'))
+      flag_for_instance_cleanup!
+      result = PSON.parse(json_result)
+      result['machineType'].split('/').last.should == 'standard-2-cpu'
+    end
+
+    it 'creates an instance with a standard-1-cpu-ephemeral-disk machine type when no machine type is provided' do
+      json_result = face.create(options)
+      flag_for_instance_cleanup!
+      result = PSON.parse(json_result)
+      result['machineType'].split('/').last.should == 'standard-1-cpu-ephemeral-disk'
+    end
   end
 
   describe 'when terminating an instance' do
