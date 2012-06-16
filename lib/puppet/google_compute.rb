@@ -69,6 +69,10 @@ module Puppet
       get('zones')
     end
 
+    def operation_list
+      get('operations')
+    end
+
   private
 
     def get(*path)
