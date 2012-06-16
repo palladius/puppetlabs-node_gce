@@ -5,6 +5,23 @@ def fixture_path(file)
   File.expand_path(File.join(File.dirname(__FILE__), '..', 'fixtures', file))
 end
 
+def flag_for_instance_cleanup!
+  @needs_instance_cleanup = true
+end
+
+def tear_down_instances
+  face        = Puppet::Face[:node_gce, :current]
+  options     = YAML.load(File.read(fixture_path('project.yml')))
+  credentials = YAML.load(File.read(fixture_path('credentials.yml')))[:gce]
+  instance_data = PSON.parse(face.list(options))
+
+  return unless instance_data['items']
+  instance_data['items'].each do |instance|
+    instance_name = instance['name'].split('/').last
+    face.terminate(options.merge(:name => instance_name))
+  end
+end
+
 describe 'instances' do
   let :face do
     Puppet::Face[:node_gce, :current]
@@ -28,6 +45,14 @@ describe 'instances' do
   describe 'when creating an instance' do
     let :options do
       YAML.load(File.read(fixture_path('project.yml'))).merge(:name => 'testnode')
+    end
+
+    before do
+      @needs_instance_cleanup = false
+    end
+
+    after do
+      tear_down_instances if @needs_instance_cleanup
     end
 
     it 'fails when there is no credentials data' do
@@ -55,13 +80,75 @@ describe 'instances' do
       lambda { face.create(options) }.should raise_error
     end
 
-    it 'returns operation data from the Google Compute API' do
-      json_result = face.create(options)
-      result = PSON.parse(json_result)  # yeah, I know.  "PSON" was not my decision.
-      result.keys.sort.should == ["id", "kind", "selfLink"]
+    it 'fails when the operation would cause a failure on the Google Compute API remote end' do
+      # for example, creating a duplicate instance
+      face.create(options)
+      flag_for_instance_cleanup!
+      lambda { face.create(options) }.should raise_error
     end
 
-    it 'creates a node with the specified name'
+    it 'returns instance data from the Google Compute API' do
+      json_result = face.create(options)
+      flag_for_instance_cleanup!
+      result = PSON.parse(json_result)  # yeah, I know.  "PSON" was not my decision.
+      result.keys.sort.should == ["description", "disks", "id", "image", "kind", "machineType", "name", "networkInterfaces", "selfLink", "status", "zone"]
+    end
+
+    it 'creates an instance with the specified name' do
+      json_result = face.create(options)
+      flag_for_instance_cleanup!
+      result = PSON.parse(json_result)
+      result['name'].split('/').last.should == options[:name]
+    end
+  end
+
+  describe 'when terminating an instance' do
+    let :options do
+      YAML.load(File.read(fixture_path('project.yml'))).merge(:name => 'testnode')
+    end
+
+    it 'fails when there is no credentials data' do
+      @handle.stubs(:fetch_credentials).returns({})
+      lambda { face.terminate(options) }.should raise_error
+    end
+
+    it 'fails when the credentials data does not include a client id' do
+      credentials.delete(:client_id)
+      lambda { face.terminate(options) }.should raise_error
+    end
+
+    it 'fails when the credentials data does not include a client secret' do
+      credentials.delete(:client_secret)
+      lambda { face.terminate(options) }.should raise_error
+    end
+
+    it 'fails when the credentials data does not include a refresh token' do
+      credentials.delete(:refresh_token)
+      lambda { face.terminate(options) }.should raise_error
+    end
+
+    it 'fails when the credentials provided are invalid' do
+      credentials[:client_id] = '1462647242-bad-id.apps.googleusercontent.com'
+      lambda { face.terminate(options) }.should raise_error
+    end
+
+    it 'fails when the operation would cause a failure on the Google Compute API remote end' do
+      lambda { face.terminate(options.merge( :name => 'bogus-node' )) }.should raise_error
+    end
+
+    it 'returns termination operation status data from the Google Compute API' do
+      face.create(options)
+      json_result = face.terminate(options)
+      result = PSON.parse(json_result)
+      result.keys.sort.should == ["endTime", "id", "insertTime", "kind", "name", "operationType", "progress", "selfLink", "startTime", "status", "targetId", "targetLink", "user"]
+    end
+
+    it 'terminates the instance with the specified name' do
+      face.create(options)
+      json_result = face.terminate(options)
+      result = PSON.parse(json_result)
+      result['targetLink'].split('/').last.should == options[:name]
+    end
   end
 
   describe 'when retrieving instance list data' do
@@ -92,7 +179,7 @@ describe 'instances' do
 
     it 'returns the instance list data from the Google Compute API' do
       json_result = face.list(options)
-      result = PSON.parse(json_result)  # yeah, I know.  "PSON" was not my decision.
+      result = PSON.parse(json_result)
       result.keys.sort.should == ["id", "kind", "selfLink"]
     end
   end

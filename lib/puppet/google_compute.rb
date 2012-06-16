@@ -34,7 +34,15 @@ module Puppet
           }
         ]
       }
-      post('instances', args)
+      wait_for_instance(post('instances', args))
+    end
+
+    def instance_delete(params)
+      wait_for(delete('instances', params[:name]))
+    end
+
+    def operation_get(params)
+      get('operations', params[:name])
     end
 
   private
@@ -48,6 +56,10 @@ module Puppet
         request.headers['Content-Type'] = 'application/json'
         request.body = PSON.dump(params)
       }.body
+    end
+
+    def delete(*path)
+      token.delete(build_url(*path)).body
     end
 
     def machine_type(name)
@@ -73,6 +85,45 @@ module Puppet
 
     def api_url
       "https://www.googleapis.com/compute/v1beta11"
+    end
+
+    def wait_for(operation_json)
+      operation = thaw_operation(operation_json)
+      while ongoing_operation?(operation)
+        sleep 3
+        operation_json = operation_get(:name => operation_name(operation))
+        operation = thaw_operation(operation_json)
+      end
+      operation_json
+    end
+
+    def thaw_operation(operation_json)
+      operation = PSON.parse(operation_json)
+      check_operation_for_error(operation)
+      operation
+    end
+
+    def wait_for_instance(operation_json)
+      convert_operation(wait_for(operation_json))
+    end
+
+    def ongoing_operation?(operation)
+      operation['status'] != 'DONE'
+    end
+
+    def check_operation_for_error(operation)
+      return unless operation['error']
+      error_messages = operation['error']['errors'].collect {|e| e['message']}
+      raise "Errors encountered:\n" + error_messages.join("\n")
+    end
+
+    def convert_operation(operation_json)
+      operation = PSON.parse(operation_json)
+      instance_get(:name => instance_name(operation['targetLink']))
+    end
+
+    def operation_name(operation)
+      operation['name'].split('/').last
     end
 
     def instance_name(instance_url)
