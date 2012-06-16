@@ -210,5 +210,7 @@ describe 'instances' do
       result = PSON.parse(json_result)
       result.keys.sort.should == ["id", "kind", "selfLink"]
     end
+
+    it 'follows pagination links when a large number of instances are present'
   end
 end
