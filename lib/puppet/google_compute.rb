@@ -53,6 +53,10 @@ module Puppet
       get('firewalls')
     end
 
+    def image_list
+      get('images')
+    end
+
   private
 
     def get(*path)
