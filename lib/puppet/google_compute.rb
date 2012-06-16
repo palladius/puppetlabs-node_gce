@@ -45,6 +45,10 @@ module Puppet
       get('operations', params[:name])
     end
 
+    def network_list
+      get('networks')
+    end
+
   private
 
     def get(*path)
