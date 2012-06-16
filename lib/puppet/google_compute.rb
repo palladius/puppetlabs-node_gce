@@ -75,6 +75,10 @@ module Puppet
       "https://www.googleapis.com/compute/v1beta11"
     end
 
+    def instance_name(instance_url)
+      instance_url.split('/').last
+    end
+
     def token
       @token ||= authenticate
     end
