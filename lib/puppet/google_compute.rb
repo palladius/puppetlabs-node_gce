@@ -97,18 +97,14 @@ module Puppet
       operation_json
     end
 
+    def wait_for_instance(operation_json)
+      convert_operation_to_instance(wait_for(operation_json))
+    end
+
     def thaw_operation(operation_json)
       operation = PSON.parse(operation_json)
       check_operation_for_error(operation)
       operation
-    end
-
-    def wait_for_instance(operation_json)
-      convert_operation(wait_for(operation_json))
-    end
-
-    def ongoing_operation?(operation)
-      operation['status'] != 'DONE'
     end
 
     def check_operation_for_error(operation)
@@ -117,7 +113,11 @@ module Puppet
       raise "Errors encountered:\n" + error_messages.join("\n")
     end
 
-    def convert_operation(operation_json)
+    def ongoing_operation?(operation)
+      operation['status'] != 'DONE'
+    end
+
+    def convert_operation_to_instance(operation_json)
       operation = PSON.parse(operation_json)
       instance_get(:name => instance_name(operation['targetLink']))
     end
