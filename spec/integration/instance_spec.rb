@@ -1,27 +1,6 @@
 require 'spec_helper'
 require 'yaml'
 
-def fixture_path(file)
-  File.expand_path(File.join(File.dirname(__FILE__), '..', 'fixtures', file))
-end
-
-def flag_for_instance_cleanup!
-  @needs_instance_cleanup = true
-end
-
-def tear_down_instances
-  face        = Puppet::Face[:node_gce, :current]
-  options     = YAML.load(File.read(fixture_path('project.yml')))
-  credentials = YAML.load(File.read(fixture_path('credentials.yml')))[:gce]
-  instance_data = PSON.parse(face.list(options))
-
-  return unless instance_data['items']
-  instance_data['items'].each do |instance|
-    instance_name = instance['name'].split('/').last
-    face.terminate(options.merge(:name => instance_name))
-  end
-end
-
 describe 'instances' do
   let :face do
     Puppet::Face[:node_gce, :current]
