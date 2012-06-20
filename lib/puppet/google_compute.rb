@@ -33,8 +33,8 @@ module Puppet
     def instance_create(params)
       args = {
         'name'         => params[:name],
-        'machineType'  => machine_type(params[:machine_type] || 'standard-1-cpu-ephemeral-disk'),
-        'zone'         => zone(params[:zone] || 'us-east-a'),
+        'machineType'  => machine_type(params[:machine_type] || 'n1-standard-1'),
+        'zone'         => zone(params[:zone] || 'us-central1-a'),
         'networkInterfaces' => [  # hi, I'm undocumented!
           {
             'accessConfigs' => [ { 'type' => "ONE_TO_ONE_NAT", 'name' => "External NAT" } ],
@@ -116,7 +116,7 @@ module Puppet
     end
 
     def api_url
-      "https://www.googleapis.com/compute/v1beta11"
+      "https://www.googleapis.com/compute/v1beta12"
     end
 
     def wait_for(operation_json)
