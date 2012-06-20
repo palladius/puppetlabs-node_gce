@@ -2,7 +2,7 @@ require 'puppet/face/node_gce'
 
 Puppet::Face.define :node_gce, '0.0.1' do
   action :terminate do
-    summary 'Create a running machine instance.'
+    summary 'Destroy a running machine instance.'
     description <<-EOT
       Shuts down a new Google Compute machine instance and returns the
       machine's identifier.
