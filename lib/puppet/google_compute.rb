@@ -198,9 +198,10 @@ module Puppet
 
     def validate_credentials
       unvalidated_credentials = fetch_credentials
+      raise "Missing google compute credentials in config file #{credentials_path}" unless unvalidated_credentials
 
       [:client_id, :client_secret, :refresh_token].each do |arg|
-        raise(ArgumentError, ":#{arg} must be specified in credentials") unless unvalidated_credentials[arg]
+        raise(ArgumentError, ":#{arg} must be specified in credentials in config file #{credentials_path}") unless unvalidated_credentials[arg]
       end
 
       unvalidated_credentials
