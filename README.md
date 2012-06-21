@@ -44,7 +44,7 @@ For developers of the puppet face, apply dev manifest:
 
 The uninstall manifests should remove all gems and node_gce lib files from puppet:
 
-    $ puppet apply node_gce/tests/init.pp
+    $ puppet apply node_gce/tests/uninstall.pp
     $ puppet module uninstall puppetlabs-node_gce
 
 # Configuration:
