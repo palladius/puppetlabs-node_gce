@@ -81,17 +81,17 @@ describe 'instances' do
     end
 
     it 'creates an instance with the specified machine type when a machine type is provided' do
-      json_result = face.create(options.merge(:machine_type => 'standard-2-cpu'))
+      json_result = face.create(options.merge(:machine_type => 'n1-standard-2'))
       flag_for_instance_cleanup!
       result = PSON.parse(json_result)
-      result['machineType'].split('/').last.should == 'standard-2-cpu'
+      result['machineType'].split('/').last.should == 'n1-standard-2'
     end
 
     it 'creates an instance with a standard-1-cpu-ephemeral-disk machine type when no machine type is provided' do
       json_result = face.create(options)
       flag_for_instance_cleanup!
       result = PSON.parse(json_result)
-      result['machineType'].split('/').last.should == 'standard-1-cpu-ephemeral-disk'
+      result['machineType'].split('/').last.should == 'n1-standard-1'
     end
 
     it 'creates an instance with the specified zone when a zone is provided' do
