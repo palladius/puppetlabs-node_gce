@@ -55,7 +55,26 @@ Usage of google compute project requires access to a project domain and a unique
 * Create a Google Compute project domain and project id. (i.e. puppetlabs.com:my_project)
 * Create a product name and authorize API access (project name: "Puppet Cloud Provisioner")
 * Create a 'Client ID for an "installed application"'
-* run bin/credentials_builder.rb specifying that output should go to ~/.fog (spec/fixtures/credentials.yml for testing)
+* Execute bin/credentials_builder.rb specifying that output should go to ~/.fog (spec/fixtures/credentials.yml for testing)
+
+        Building credentials file for Google Compute Oauth2
+        Enter client_id: 583011575284-idaf812lkj3kda0f.apps.googleusercontent.com
+        Enter client_secret: qbWsdfk8zkdasf123j
+        
+        Go to this link to authorize the application:
+        
+        https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2F
+        ...
+        
+        and enter the code you find after authorizing: 4/sbQCOs8lkz8cvjq2k3-jvzafdsaf.
+        
+        client_id: 52313212-idasf921.apps.googleusercontent.com
+        client_secret: ida8214kdasfsd93
+        authorization_code: sfas1/daf9123123kjfasfojdjsfk213213
+        refresh_token: dsfas9123kdsfaj123;sadkfa
+        
+        Enter file for storing OAuth2 credentials [/tmp/oauth2_credentials.yml]: ~/.fog
+        Storing credentials information in [~/.fog]...
 
 Example ~/.fog configuration:
 
@@ -172,17 +191,27 @@ Google recommends these additional parameters since compute nodes are ephemeral.
 
 To get your environment setup to be able to run specs:
 
- - clone and/or update git checkouts of puppet and facter
- - switch to puppet branch 2.7.12
- - switch to facter branch 1.6.9
+ - git clone and/or update checkouts of puppet, facter, and node_gce face.
 
-        % ENVPUPPET_BASEDIR=~/git; export ENVPUPPET_BASEDIR
-        % . ~/git/puppet/ext/envpuppet
+        $ cd ~/src
+        % git clone https://github.com/puppetlabs/puppet.git
+        % git clone https://github.com/puppetlabs/facter.git
+        % git clone https://github.com/puppetlabs/puppetlabs-node_gce.git
+
+ - Verify puppet version 2.7.12+ and facter version 1.6.9+:
+
+        % ENVPUPPET_BASEDIR=~/src; export ENVPUPPET_BASEDIR
+        % . ~/src/puppet/ext/envpuppet
+        % puppet --version
+        % facter --version
+
+ - Add node_gce/lib to RUBYLIB:
+
         % set +e
         % RUBYLIB="${RUBYLIB}:${HOME}/git/puppetlabs-node_gce/lib"; export RUBYLIB
         % gem install rspec mocha oauth
 
- - run bin/credentials_builder.rb specifying that output should go to spec/fixtures/credentials.yml
- - make a spec/fixtures/project.yml (see spec/fixtures/project.yml-example for format) with your project name in it
+ - Execute bin/credentials_builder.rb and specify output file: spec/fixtures/credentials.yml
+ - Create a spec/fixtures/project.yml with your project name in it (see spec/fixtures/project.yml-example).
 
-    % rspec spec
+        % rspec spec
