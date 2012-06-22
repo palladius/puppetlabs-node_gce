@@ -57,6 +57,19 @@ module Puppet
       get('machine-types')
     end
 
+    def metadata_list
+      get('')
+    end
+
+    def metadata_create(params)
+      args = {
+        'kind'  => "compute#metadata",
+        'items' => params,
+      }
+      # Does not return any value.
+      post('set-common-instance-metadata', args)
+    end
+
     def network_list
       get('networks')
     end
