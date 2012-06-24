@@ -1,5 +1,5 @@
 class { 'node_gce':
   ensure      => present,
-  optional    => false,
+  optional    => true,
   development => false,
 }
