@@ -35,6 +35,7 @@ module Puppet
         'name'         => params[:name],
         'machineType'  => machine_type(params[:machine_type] || 'n1-standard-1'),
         'zone'         => zone(params[:zone] || 'us-central1-a'),
+        'image'        => image(params[:image] || 'ubuntu-10-04-v20120621'),
         'networkInterfaces' => [  # hi, I'm undocumented!
           {
             'accessConfigs' => [ { 'type' => "ONE_TO_ONE_NAT", 'name' => "External NAT" } ],
@@ -113,6 +114,14 @@ module Puppet
 
     def zone(name)
       build_url('zones', name)
+    end
+    
+    #
+    # Only supports Google images at the moment.
+    #
+
+    def image(name)
+      url = "#{api_url}/projects/google/images/" + name 
     end
 
     def network(name)

@@ -64,11 +64,9 @@ Usage of google compute project requires access to a project domain and a unique
 * Create a Google Compute project domain and project id. (i.e. puppetlabs.com:my_project)
 * Create a product name and authorize API access (project name: "Puppet Cloud Provisioner")
 * Create a 'Client ID for an "installed application"'
-* Execute bin/credentials_builder.rb specifying that output should go to ~/.fog (spec/fixtures/credentials.yml for testing)
+* Execute /tmp/build_gce_credentials.rb specifying that output should go to ~/.fog (spec/fixtures/credentials.yml for testing)
 
         Building credentials file for Google Compute Oauth2
-        Enter client_id: 583011575284-idaf812lkj3kda0f.apps.googleusercontent.com
-        Enter client_secret: qbWsdfk8zkdasf123j
         
         Go to this link to authorize the application:
         
