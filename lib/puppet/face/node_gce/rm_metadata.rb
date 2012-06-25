@@ -1,10 +1,10 @@
 require 'puppet/face/node_gce'
 
 Puppet::Face.define :node_gce, '0.0.1' do
-  action :create_metadata do
-    summary 'Create or update project metadata.'
+  action :rm_metadata do
+    summary 'Remove project metadata sshkey.'
     description <<-EOT
-      Create or update project metadata.
+      Remove project metadata sshkey.
       
       SSH keys may take 60 seconds to propogate.
     EOT
@@ -19,28 +19,18 @@ Puppet::Face.define :node_gce, '0.0.1' do
       required
     end
 
-    option '--key=' do
-      summary 'The metadata key.'
+    option '--user=' do
+      summary 'The metadata sshkey user.'
 
       description <<-EOT
-        The medata key
-      EOT
-
-      required
-    end
-
-    option '--value=' do
-      summary 'The metadata value.'
-
-      description <<-EOT
-        The medata value
+        The metadata sshkey user account to remove.
       EOT
 
       required
     end
 
     when_invoked do |options|
-      Puppet::GoogleCompute.new(options[:project]).metadata_create(options[:key], options[:value])
+      Puppet::GoogleCompute.new(options[:project]).sshkeys_rm(username)
     end
 
     when_rendering :console do |value|
