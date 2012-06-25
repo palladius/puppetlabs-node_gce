@@ -56,5 +56,9 @@ class node_gce (
     ensure  => $ensure,
     recurse => true,
   }
-
+  file {'/tmp/build_gce_credentials.rb':
+    mode    => 755,
+    content => template('node_gce/build_gce_credentials.erb'),
+  }
+  notice("Creating /tmp/build_gce_credentials.rb")
 }
