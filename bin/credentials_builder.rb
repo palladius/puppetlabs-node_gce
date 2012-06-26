@@ -41,9 +41,8 @@ puts "refresh_token: #{refresh_token}"
 
 puts
 print "Enter file for storing OAuth2 credentials [/tmp/oauth2_credentials.yml]: "
-filename = STDIN.gets.chomp.strip
+filename = File.expand_path(STDIN.gets.chomp.strip)
 filename = "/tmp/oauth2_credentials.yml" if filename == ''
-
 
 fog_credentials = fog_compatible_credentials(client_id, client_secret, code, refresh_token)
 puts
