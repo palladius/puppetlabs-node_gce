@@ -1,12 +1,12 @@
 # puppetlabs node_gce module
 
-This module provides a cloud provisioner face for google compute.
+This module provides Puppet cloud provisioner face for Google Compute.
 
 # Dependencies:
 
 The puppet module tool in Puppet Enterprise 2.5.0+ and Puppet 2.7.14+ resolves dependencies automatically.
 
-puppet module dependencies:
+node_gce puppet module dependencies:
 
 * puppetlabs-lib_puppet
 * puppetlabs-pe_gem
@@ -32,13 +32,22 @@ Install puppetlabs-node_gce module and dependencies into module_path:
       ├── puppetlabs-lib_puppet (v0.0.1)
       └── puppetlabs-pe_gem (v0.0.1)
 
-For users, apply either init or minimal manifest:
+For users, apply either init or optional manifest:
 
     $ puppet apply node_gce/tests/init.pp
 
 For developers of the puppet face, apply dev manifest:
 
     $ puppet apply node_gce/tests/dev.pp
+
+If you are running puppet master and wish to enable node_gce face for a node:
+
+    node 'dev1.puppetlabs.lan' {
+      class { 'node_gce':
+        optional    => true,
+        development => true,
+      }
+    }
 
 # Uninstall:
 
@@ -51,7 +60,7 @@ The uninstall manifests should remove all gems and node_gce lib files from puppe
 
 Usage of google compute project requires access to a project domain and a unique project id.
 
-* Enable Google Compute Engine under Google API services.
+* Enable Google Compute Engine under [Google API services](https://code.google.com/apis/console/?pli=1#:services)
 * Create a Google Compute project domain and project id. (i.e. puppetlabs.com:my_project)
 * Create a product name and authorize API access (project name: "Puppet Cloud Provisioner")
 * Create a 'Client ID for an "installed application"'
