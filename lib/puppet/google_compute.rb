@@ -61,13 +61,51 @@ module Puppet
       get('')
     end
 
-    def metadata_create(params)
+    def metadata_merge(key, value)
+      metadata = PSON.parse(metadata_list)
+      items = metadata["commonInstanceMetadata"]["items"] || []
+
+      found = false
+      items = items.each { |i|
+        if i["key"] == key
+          i["value"] = value
+          found = true
+        end
+      }
+
+      items << { 'key' => key, 'value' => value } unless found
+      items
+    end
+
+    def metadata_create(key, value)
+      params = metadata_merge(key, value)
       args = {
         'kind'  => "compute#metadata",
         'items' => params,
       }
       # Does not return any value.
       post('set-common-instance-metadata', args)
+    end
+
+    def sshkeys
+      metadata = PSON.parse(metadata_list)
+      items = metadata["commonInstanceMetadata"]["items"] || []
+      keys = items.find{ |i| i['key'] == 'sshKeys' }['value'] || ''
+      result=Hash[keys.split("\n").collect{|x| x.split(':')}]
+      result
+    end
+
+    def sshkeys_add(user, key)
+      keys = sshkeys
+      keys[user] = key
+      keys = keys.collect{|k,v| "#{k}:#{v}"}.join("\n")
+      metadata_create('sshKeys', keys)
+    end
+
+    def sshkeys_rm(user)
+      keys = sshkeys.reject{|k,v| k == user}
+      keys = keys.collect{|k,v| "#{k}:#{v}"}.join("\n")
+      metadata_create('sshKeys', keys)
     end
 
     def network_list

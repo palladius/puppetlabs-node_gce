@@ -1,10 +1,10 @@
 require 'puppet/face/node_gce'
 
 Puppet::Face.define :node_gce, '0.0.1' do
-  action :create_metadata do
-    summary 'Create or update project metadata.'
+  action :add_metadata do
+    summary 'Add or update project metadata sshkey.'
     description <<-EOT
-      Create or update project metadata.
+      Add project metadata sshkey.
       
       SSH keys may take 60 seconds to propogate.
     EOT
@@ -19,28 +19,28 @@ Puppet::Face.define :node_gce, '0.0.1' do
       required
     end
 
-    option '--key=' do
-      summary 'The metadata key.'
+    option '--sshkey=' do
+      summary 'The metadata sshkey file.'
 
       description <<-EOT
-        The medata key
+        The metadata sshkey file.
       EOT
 
       required
     end
 
-    option '--value=' do
-      summary 'The metadata value.'
+    option '--user=' do
+      summary 'The metadata sshkey user.'
 
       description <<-EOT
-        The medata value
+        The metadata sshkey user (defaults to current user).
       EOT
-
-      required
     end
 
     when_invoked do |options|
-      Puppet::GoogleCompute.new(options[:project]).metadata_create(options[:key], options[:value])
+      username = options[:user] || Etc.getpwuid(Process.uid).name
+      sshkey = File.open(File.expand_path(options[:sshkey]), 'r') { |f| f.read }
+      Puppet::GoogleCompute.new(options[:project]).sshkeys_add(username, sshkey)
     end
 
     when_rendering :console do |value|

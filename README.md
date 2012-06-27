@@ -111,23 +111,26 @@ Puppet Face node_gce usage is similar to other cloud provisioner faces. It suppo
       --debug                        - Whether to log debug information.
     
     ACTIONS:
+
+      add_metadata       Add or update project metadata sshkey.
       create             Create a new machine instance.
-      create_metadata    Create or update project metadata.
       disks              List disks.
       firewalls          List firewalls.
       images             List images.
       kernels            List kernels.
       list               List machine instances.
+      machine_types      List machine types.
       metadata           List project metadata.
       networks           List networks.
       operations         List operations.
       project            Return information on the project in question.
+      rm_metadata        Remove project metadata sshkey.
       terminate          Destroy a running machine instance.
-      zones              List zones.$ puppet help node_gce
+      zones              List zones.
 
 Before creating any new instances, make sure the project metadata contains a ssh key. The sshkey metadata key is 'sshKeys' and the value is a list of ssh keys that's in the format of 'usenname:sshkey-type sshkey value' seperated by newlines.
 
-    $ puppet node_gce create_metadata --project=puppetlabs.com:gce --key 'sshKeys' --value 'username:ssh-rsa AAAA..'
+    $ puppet node_gce add_metadata --project=puppetlabs.com:gce --user='paul' --sshkey=~/.ssh/paul.rsa.pub
     $ puppet node_gce metadata --project=puppetlabs.com:gce
     {
      "kind": "compute#project",
@@ -141,7 +144,7 @@ Before creating any new instances, make sure the project metadata contains a ssh
       "items": [
        {
         "key": "sshKeys",
-        "value": "username:ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAg...",
+        "value": "paul:ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAg...",
        }
       ]
      },
