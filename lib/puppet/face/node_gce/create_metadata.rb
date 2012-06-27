@@ -41,7 +41,7 @@ Puppet::Face.define :node_gce, '0.0.1' do
 
     when_invoked do |options|
       metadata = PSON.parse(Puppet::GoogleCompute.new(options[:project]).metadata_list())
-      items = metadata["commonInstanceMetadata"]["items"] || {}
+      items = metadata["commonInstanceMetadata"]["items"] || []
 
       found = false
       items = items.each { |i|
